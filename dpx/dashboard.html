@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Student Dashboard</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Student Management System</h1>
+
+    <h2>Student Dashboard</h2>
+
+    <p>Welcome Student</p>
+
+    <hr>
+
+    <h3>My Profile</h3>
+
+    <p>Name: Student</p>
+    <p>Department: Information Technology</p>
+
+    <h3>Student Documents</h3>
+
+    <p>Select a file to upload to Dropbox</p>
+
+    <input type="file" id="file">
+
+    <br><br>
+
+    <button onclick="uploadFile()">
+        Upload to Dropbox
+    </button>
+
+    <p id="message"></p>
+
+    <hr>
+
+    <h3>My Courses</h3>
+
+    <p>Web Technology</p>
+    <p>Cloud Computing</p>
+    <p>Data Science</p>
+
+    <h3>My Attendance</h3>
+
+    <p>Web Technology - 85%</p>
+    <p>Cloud Computing - 90%</p>
+    <p>Data Science - 88%</p>
+
+    <br>
+
+    <button onclick="logout()">
+        Logout
+    </button>
+
+</div>
+
+<script src="./script.js"></script>
+
+</body>
+
+</html>

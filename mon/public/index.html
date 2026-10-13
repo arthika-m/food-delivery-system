@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Management System</title>
+</head>
+<body>
+
+    <h2>Welcome to the Management System</h2>
+    <p>Enter details below.</p>
+
+    <h3>Details</h3>
+
+    <input type="hidden" id="recordId">
+
+    <label>Name:</label>
+    <input type="text" id="name" placeholder="Enter">
+
+    <label>Department:</label>
+    <input type="text" id="department" placeholder="Enter">
+
+    <label>Year:</label>
+    <input type="text" id="year" placeholder="Enter">
+
+    <button onclick="saveRecord()">Add</button>
+    <button onclick="clearForm()">Clear</button>
+
+    <h3>Records</h3>
+
+    <table border="1" cellpadding="8">
+        <thead>
+            <tr>
+                <th>S.No</th>
+                <th>Name</th>
+                <th>Department</th>
+                <th>Year</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="recordTable"></tbody>
+    </table>
+
+    <script>
+        async function loadRecords() {
+            const response = await fetch("/records");
+            const records = await response.json();
+
+            const table = document.getElementById("recordTable");
+            table.innerHTML = "";
+
+            records.forEach((record, index) => {
+                const row = table.insertRow();
+
+                row.insertCell().textContent = index + 1;
+                row.insertCell().textContent = record.name;
+                row.insertCell().textContent = record.department;
+                row.insertCell().textContent = record.year;
+
+                const actions = row.insertCell();
+
+                const editButton = document.createElement("button");
+                editButton.textContent = "Edit";
+                editButton.onclick = () => editRecord(record);
+
+                const deleteButton = document.createElement("button");
+                deleteButton.textContent = "Delete";
+                deleteButton.onclick = () => deleteRecord(record._id);
+
+                actions.appendChild(editButton);
+                actions.appendChild(deleteButton);
+            });
+        }
+
+        async function saveRecord() {
+            const id = document.getElementById("recordId").value;
+            const name = document.getElementById("name").value.trim();
+            const department = document.getElementById("department").value.trim();
+            const year = document.getElementById("year").value.trim();
+
+            if (!name || !department || !year) {
+                alert("Please enter all three fields");
+                return;
+            }
+
+            const method = id ? "PUT" : "POST";
+            const url = id ? "/records/" + id : "/records";
+
+            try {
+                const response = await fetch(url, {
+                    method: method,
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ name, department, year })
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    alert(result.message || result.error || "Operation failed");
+                    return;
+                }
+
+                alert(id ? "Student updated successfully!" : "Student added successfully!");
+
+                clearForm();
+                await loadRecords();
+            } catch (error) {
+                alert("Unable to connect to the server");
+            }
+        }
+
+        function editRecord(record) {
+            document.getElementById("recordId").value = record._id;
+            document.getElementById("name").value = record.name;
+            document.getElementById("department").value = record.department;
+            document.getElementById("year").value = record.year;
+
+            document.querySelector("button[onclick='saveRecord()']")
+                .textContent = "Update Student";
+        }
+
+        async function deleteRecord(id) {
+            if (!confirm("Are you sure you want to delete this student?")) {
+                return;
+            }
+
+            try {
+                const response = await fetch("/records/" + id, {
+                    method: "DELETE"
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    alert(result.message || result.error || "Delete failed");
+                    return;
+                }
+
+                alert("Student deleted successfully!");
+                await loadRecords();
+            } catch (error) {
+                alert("Unable to connect to the server");
+            }
+        }
+
+        function clearForm() {
+            document.getElementById("recordId").value = "";
+            document.getElementById("name").value = "";
+            document.getElementById("department").value = "";
+            document.getElementById("year").value = "";
+
+            document.querySelector("button[onclick='saveRecord()']")
+                .textContent = "Add Student";
+        }
+
+        loadRecords();
+    </script>
+
+</body>
+</html>

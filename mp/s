@@ -1,0 +1,38 @@
+
+import org.apache.spark.SparkContext
+import org.apache.spark.SparkConf
+
+object SparkWordCount {
+
+  def main(args: Array[String]): Unit = {
+
+    // Create Spark Configuration
+    val conf = new SparkConf()
+      .setAppName("Word Count")
+      .setMaster("local[*]")
+
+    // Create Spark Context
+    val sc = new SparkContext(conf)
+
+    // Read input file
+    val input = sc.textFile(args(0))
+
+    // Split lines into words
+    val words = input.flatMap(line => line.split("\\s+"))
+
+    // Assign count 1 to each word
+    val pairs = words.map(word => (word, 1))
+
+    // Count occurrences of each word
+    val counts = pairs.reduceByKey(_ + _)
+
+    // Display the result
+    counts.collect().foreach(println)
+
+    // Save output to a file
+    counts.saveAsTextFile(args(1))
+
+    // Stop Spark Context
+    sc.stop()
+  }
+}

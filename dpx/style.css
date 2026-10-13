@@ -1,0 +1,58 @@
+body {
+
+    font-family: Arial;
+
+    background-color: lightblue;
+
+    text-align: center;
+
+}
+
+
+.container {
+
+    background-color: white;
+
+    width: 60%;
+
+    margin: 50px auto;
+
+    padding: 30px;
+
+}
+
+
+button {
+
+    background-color: blue;
+
+    color: white;
+
+    padding: 10px 20px;
+
+    border: none;
+
+    cursor: pointer;
+
+}
+
+
+input {
+
+    padding: 10px;
+
+}
+
+
+hr {
+
+    margin: 20px;
+
+}
+
+
+h3 {
+
+    margin-top: 20px;
+
+}

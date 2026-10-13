@@ -1,0 +1,27 @@
+Run the application
+Important pa: Indha project-ku Express server thevai illa. Firebase Hosting CLI use pannuvom.
+Firebase CLI already installed irundha:
+firebase --version
+
+
+Version display aagala na:
+npm install -g firebase-tools
+
+
+Then run:
+firebase serve --only hosting
+
+
+Terminal-la display aagura local URL-a browser-la open pannu. Usually:
+http://localhost:5000
+Register → Login → Add Student → Edit → Delete ellam test pannu.
+Step 5: If college system asks you to log in
+Local application run panna firebase login sometimes thevai illai for Firebase Hosting's local emulator/serve. If CLI asks for authentication, or you need to deploy changes, run:
+firebase login
+
+
+Un Firebase project-ku internet access irukkanum. Authentication and Firestore cloud-la irukkuradhunaala avai online-la connect aagum.
+Step 6: If you change code in the lab
+public/index.html-la changes pannina, local browser refresh pannu.
+Changes-a online website-kum publish panna mattum:
+firebase deploy --only hosting
