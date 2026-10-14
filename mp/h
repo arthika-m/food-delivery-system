@@ -1,3 +1,140 @@
+/*H
+1. Install Java
+sudo apt update
+sudo apt install -y openjdk-11-jdk ssh rsync wget
+java -version
+
+
+2. Download Hadoop
+cd ~
+wget https://archive.apache.org/dist/hadoop/common/hadoop-3.3.6/hadoop-3.3.6.tar.gz
+tar -xzf hadoop-3.3.6.tar.gz
+mv hadoop-3.3.6 hadoop
+
+
+3. Configure Hadoop Environment
+nano ~/.bashrc
+
+
+Add:
+export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+export HADOOP_HOME=$HOME/hadoop
+export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
+
+
+source ~/.bashrc
+hadoop version
+
+
+4. Configure SSH
+ssh-keygen -t rsa -P "" -f ~/.ssh/id_rsa
+cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+chmod 600 ~/.ssh/authorized_keys
+ssh localhost
+
+
+5. Configure Hadoop XML Files
+Edit these files inside $HADOOP_HOME/etc/hadoop/:
+- core-site.xml
+- hdfs-site.xml
+- hadoop-env.sh
+- mapred-site.xml
+- yarn-site.xml
+6. Create HDFS Directories
+mkdir -p ~/hadoop/data/namenode
+mkdir -p ~/hadoop/data/datanode
+
+
+7. Format NameNode — First Time Only
+hdfs namenode -format
+
+
+8. Start Hadoop
+start-dfs.sh
+start-yarn.sh
+jps
+
+
+9. Stop Hadoop
+stop-yarn.sh
+stop-dfs.sh......
+
+S:
+Spark Installation Commands
+1. Check Java and Hadoop
+java -version
+hadoop version
+
+
+2. Download and Extract Spark
+cd ~
+wget https://archive.apache.org/dist/spark/spark-3.5.8/spark-3.5.8-bin-hadoop3.tgz
+tar -xzf spark-3.5.8-bin-hadoop3.tgz
+mv spark-3.5.8-bin-hadoop3 spark
+
+
+3. Configure Spark Environment
+nano ~/.bashrc
+
+
+Add:
+export SPARK_HOME=$HOME/spark
+export PATH=$PATH:$SPARK_HOME/bin
+
+
+source ~/.bashrc
+spark-shell --version
+
+
+4. Create Input File
+mkdir -p ~/spark-wordcount
+cd ~/spark-wordcount
+nano input.txt
+
+
+Enter:
+hello spark hello hadoop
+spark is fast
+hadoop is useful
+
+
+5. Start Hadoop Services
+start-dfs.sh
+start-yarn.sh
+
+
+6. Upload Input to HDFS
+hdfs dfs -mkdir -p /user/$USER/spark/input
+hdfs dfs -put input.txt /user/$USER/spark/input/
+
+
+7. Start Spark Shell
+spark-shell
+
+
+8. Execute Word Count
+Type these commands inside scala>:
+val input = sc.textFile("hdfs:///user/YOUR_USERNAME/spark/input/input.txt")
+val words = input.flatMap(line => line.split("\\s+"))
+val pairs = words.map(word => (word, 1))
+val counts = pairs.reduceByKey(_ + _)
+counts.collect().foreach(println)
+
+
+Replace YOUR_USERNAME with your Ubuntu username.
+9. Save Output
+counts.saveAsTextFile("hdfs:///user/YOUR_USERNAME/spark/output")
+
+
+10. View Output
+Exit Spark Shell using :quit, then run:
+hdfs dfs -cat /user/$USER/spark/output/part-00000
+
+
+11. Stop Hadoop
+stop-yarn.sh
+stop-dfs.sh
+
 //Mapper.java:
 
 
