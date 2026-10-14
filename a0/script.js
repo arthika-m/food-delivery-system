@@ -19,7 +19,6 @@ async function startAuth0() {
     });
 
 
-    // Handle Auth0 login response
     if (
         window.location.search.includes("code=") &&
         window.location.search.includes("state=")
