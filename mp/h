@@ -1,231 +1,272 @@
-/*H
-1. Install Java
-sudo apt update
-sudo apt install -y openjdk-11-jdk ssh rsync wget
-java -version
+* lsb_release -a
+* java -version
+* hadoop version
+if not:
+* java -version
+* sudo apt update
+* sudo apt install openjdk-11-jdk
+* java -version
+* sudo apt install ssh rsync wget
+* readlink -f "$(which java)"
+
+You may see a path similar to:
+/usr/lib/jvm/java-11-openjdk-amd64/bin/java
 
 
-2. Download Hadoop
-cd ~
-wget https://archive.apache.org/dist/hadoop/common/hadoop-3.3.6/hadoop-3.3.6.tar.gz
-tar -xzf hadoop-3.3.6.tar.gz
-mv hadoop-3.3.6 hadoop
+For that example, JAVA_HOME is:
+/usr/lib/jvm/java-11-openjdk-amd64
 
 
-3. Configure Hadoop Environment
-nano ~/.bashrc
+Remember: JAVA_HOME is the directory before /bin/java, not the complete Java executable path.
+
+--
+* cd ~
+* wget https://archive.apache.org/dist/hadoop/common/hadoop-3.3.6/hadoop-3.3.6.tar.gz
+* tar -xzf hadoop-3.3.6.tar.gz
+* ls
+
+You should see a directory named:
+hadoop-3.3.6
+
+Check Hadoop folder
+Terminal-la type pannu:
+* ls -d ~/hadoop-3.3.6
 
 
-Add:
+If output:
+/home/tce/hadoop-3.3.6
+
+
+vandhuchuna, extraction successful! ✅
+
+* nano ~/.bashrc
+
+File-oda bottom-ku poitu, indha 3 lines add pannu:
+
+*
 export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
-export HADOOP_HOME=$HOME/hadoop
+export HADOOP_HOME=$HOME/hadoop-3.3.6
 export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
 
 
-source ~/.bashrc
-hadoop version
+Save pannanum:
+1. Ctrl + O
+2. Enter
+3. Ctrl + X
 
+Then apply the settings:
+* source ~/.bashrc
 
-4. Configure SSH
-ssh-keygen -t rsa -P "" -f ~/.ssh/id_rsa
-cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
-chmod 600 ~/.ssh/authorized_keys
-ssh localhost
 
+Verify:
+* echo $JAVA_HOME
 
-5. Configure Hadoop XML Files
-Edit these files inside $HADOOP_HOME/etc/hadoop/:
-- core-site.xml
-- hdfs-site.xml
-- hadoop-env.sh
-- mapred-site.xml
-- yarn-site.xml
-6. Create HDFS Directories
-mkdir -p ~/hadoop/data/namenode
-mkdir -p ~/hadoop/data/datanode
 
+* echo $HADOOP_HOME
 
-7. Format NameNode — First Time Only
-hdfs namenode -format
 
+Finally:
+* hadoop version
 
-8. Start Hadoop
-start-dfs.sh
-start-yarn.sh
-jps
 
+Hadoop version 3.3.6 display aana, next configuration steps-ku ready!
 
-9. Stop Hadoop
-stop-yarn.sh
-stop-dfs.sh......
+Ippo first Step 1 command mattum run panni, enna output varudhu nu sollu. Adha confirm pannitu next step continue pannalaam.
 
-S:
-Spark Installation Commands
-1. Check Java and Hadoop
-java -version
-hadoop version
+Configure hadoop-env.sh
+Open the file:
+* nano $HADOOP_HOME/etc/hadoop/hadoop-env.sh
 
 
-2. Download and Extract Spark
-cd ~
-wget https://archive.apache.org/dist/spark/spark-3.5.8/spark-3.5.8-bin-hadoop3.tgz
-tar -xzf spark-3.5.8-bin-hadoop3.tgz
-mv spark-3.5.8-bin-hadoop3 spark
+Inside the file, Ctrl + W press panni export JAVA_HOME nu search pannu.
 
+If an active export JAVA_HOME=... line irundha, adhai indha value-ku set pannu:
+* export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 
-3. Configure Spark Environment
-nano ~/.bashrc
 
+Existing active line illaina, file-oda bottom-la add pannu.
 
-Add:
-export SPARK_HOME=$HOME/spark
-export PATH=$PATH:$SPARK_HOME/bin
+Save and exit:
+- Ctrl + O
+- Enter
+- Ctrl + X
 
+JAVA_HOME line add pannu
+Screenshot-la indha line irukku:
+# export JAVA_HOME=
 
-source ~/.bashrc
-spark-shell --version
 
+Idhu #-oda start aaguradhunaala comment pannirukkaanga. Adhai change panna thevai illa.
 
-4. Create Input File
-mkdir -p ~/spark-wordcount
-cd ~/spark-wordcount
-nano input.txt
+Keyboard-la Ctrl + End press pannu. File-oda last-ku poidum.
 
+Anga indha line type pannu:
 
-Enter:
-hello spark hello hadoop
-spark is fast
-hadoop is useful
+* export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 
+Save pannu
+1. Ctrl + O press pannu.
+2. Enter press pannu.
+3. Ctrl + X press pannu.
+Ippo terminal-ku thirumbiduva.
+Step 3 — Verify pannu
+Terminal-la indha command run pannu:
+* grep JAVA_HOME $HADOOP_HOME/etc/hadoop/hadoop-env.sh
 
-5. Start Hadoop Services
-start-dfs.sh
-start-yarn.sh
 
+Output-la nee add panna line ippadi varanum:
+export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 
-6. Upload Input to HDFS
-hdfs dfs -mkdir -p /user/$USER/spark/input
-hdfs dfs -put input.txt /user/$USER/spark/input/
 
+Adhu vandhuchuna Step 1 complete! ✅
 
-7. Start Spark Shell
-spark-shell
+Configure core-site.xml
+1. Open the file
+Terminal-la indha command type pannu:
 
+* nano $HADOOP_HOME/etc/hadoop/core-site.xml
 
-8. Execute Word Count
-Type these commands inside scala>:
-val input = sc.textFile("hdfs:///user/YOUR_USERNAME/spark/input/input.txt")
-val words = input.flatMap(line => line.split("\\s+"))
-val pairs = words.map(word => (word, 1))
-val counts = pairs.reduceByKey(_ + _)
-counts.collect().foreach(println)
 
+2. Existing content-ai replace pannu
+File open aana, adhula irukkura content-ai remove panni, indha code-ai paste pannu:
 
-Replace YOUR_USERNAME with your Ubuntu username.
-9. Save Output
-counts.saveAsTextFile("hdfs:///user/YOUR_USERNAME/spark/output")
+*
+<?xml version="1.0"?>
+<configuration>
+    <property>
+        <name>fs.defaultFS</name>
+        <value>hdfs://localhost:9000</value>
+    </property>
+</configuration>
 
 
-10. View Output
-Exit Spark Shell using :quit, then run:
-hdfs dfs -cat /user/$USER/spark/output/part-00000
 
+Idhoda meaning: Hadoop HDFS-oda NameNode address hdfs://localhost:9000-nu specify panrom.
+3. Save the file
+- Ctrl + O
+- Enter
+- Ctrl + X
+4. Verify the configuration
 
-11. Stop Hadoop
-stop-yarn.sh
-stop-dfs.sh
+Terminal-la:
+* cat $HADOOP_HOME/etc/hadoop/core-site.xml
 
-//Mapper.java:
 
+Nee paste panna XML content display aaganum.
 
-/*import java.io.IOException;
-import java.util.StringTokenizer;
+Step 3: Configure hdfs-site.xml
+Ippo indha command run pannu:
+* nano $HADOOP_HOME/etc/hadoop/hdfs-site.xml
 
-import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapreduce.Mapper;
 
-public class MapperClass
-        extends Mapper<Object, Text, Text, IntWritable> {
+Existing content-ai replace panni indha code paste pannu:
+*
 
-    private final static IntWritable one =
-            new IntWritable(1);
+<?xml version="1.0"?>
+<configuration>
+    <property>
+        <name>dfs.replication</name>
+        <value>1</value>
+    </property>
+</configuration>
 
-    private Text word = new Text();
 
-    public void map(Object key, Text value, Context context)
-            throws IOException, InterruptedException {
 
-        StringTokenizer itr =
-                new StringTokenizer(value.toString());
+Save using Ctrl + O → Enter → Ctrl + X.
 
-        while (itr.hasMoreTokens()) {
-            word.set(itr.nextToken());
-            context.write(word, one);
-        }
-    }
-}
+Verify:
+cat $HADOOP_HOME/etc/hadoop/hdfs-site.xml
 
-Reducer.java:
+Configure mapred-site.xml
+1. Open the file
+Terminal-la:
+* nano $HADOOP_HOME/etc/hadoop/mapred-site.xml
 
 
-import java.io.IOException;
+2. Add the configuration
+File open aana, existing content-ai replace panni indha code paste pannu:
+*
 
-import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapreduce.Reducer;
+<?xml version="1.0"?>
+<configuration>
+    <property>
+        <name>mapreduce.framework.name</name>
+        <value>yarn</value>
+    </property>
+</configuration>
 
-public class ReducerClass
-        extends Reducer<Text, IntWritable, Text, IntWritable> {
 
-    private IntWritable result = new IntWritable();
 
-    public void reduce(Text key, Iterable<IntWritable> values,
-                       Context context)
-            throws IOException, InterruptedException {
+3. Save
+- Ctrl + O
+- Enter
+- Ctrl + X
+4. Verify
+* cat $HADOOP_HOME/etc/hadoop/mapred-site.xml
 
-        int sum = 0;
+5. Configure yarn-site.xml
+1. Open the file
+* nano $HADOOP_HOME/etc/hadoop/yarn-site.xml
 
-        for (IntWritable val : values) {
-            sum += val.get();
-        }
 
-        result.set(sum);
-        context.write(key, result);
-    }
-}
+2. Replace the contents
+*
+<?xml version="1.0"?>
+<configuration>
+    <property>
+        <name>yarn.nodemanager.aux-services</name>
+        <value>mapreduce_shuffle</value>
+    </property>
+</configuration>
 
-wordcount.java:
 
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapreduce.Job;
-import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
-import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
-public class WordCount {
+3. Save and verify
+Save using Ctrl + O → Enter → Ctrl + X.
 
-    public static void main(String[] args) throws Exception {
+Then run:
+* cat $HADOOP_HOME/etc/hadoop/yarn-site.xml
 
-        Configuration conf = new Configuration();
+* sudo apt install ssh rsync
 
-        Job job = Job.getInstance(conf, "word count");
+Check whether an SSH key already exists
+* ls -l ~/.ssh/id_rsa ~/.ssh/id_rsa.pub
 
-        job.setJarByClass(WordCount.class);
 
-        job.setMapperClass(MapperClass.class);
-        job.setCombinerClass(ReducerClass.class);
-        job.setReducerClass(ReducerClass.class);
+If both files exist, don't generate another key.
 
-        job.setOutputKeyClass(Text.class);
-        job.setOutputValueClass(IntWritable.class);
+If the files don't exist, run:
+* mkdir -p ~/.ssh
+* ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
 
-        FileInputFormat.addInputPath(job, new Path(args[0]));
-        FileOutputFormat.setOutputPath(job, new Path(args[1]));
 
-        System.exit(job.waitForCompletion(true) ? 0 : 1);
-    }
-}
-/* 
+If asked to overwrite an existing key, type n.
+3. Add the public key
+* cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+
+
+Set the permissions:
+* chmod 600 ~/.ssh/authorized_keys
+
+
+4. Start the SSH service
+* sudo service ssh start
+
+
+5. Test SSH
+* ssh localhost
+
+
+If it asks:
+Are you sure you want to continue connecting (yes/no/[fingerprint])?
+
+
+Type:
+* yes
+
+
+If it connects successfully, type:
+* exit
+
+*******files codes replace pannumbothu no space at first
+

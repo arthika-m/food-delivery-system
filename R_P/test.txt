@@ -1,0 +1,5 @@
+npm init -y
+npm install express
+If you have already installed Express, you don't need to install it again.
+
+node server.js

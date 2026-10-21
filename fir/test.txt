@@ -24,4 +24,12 @@ Un Firebase project-ku internet access irukkanum. Authentication and Firestore c
 Step 6: If you change code in the lab
 public/index.html-la changes pannina, local browser refresh pannu.
 Changes-a online website-kum publish panna mattum:
+
 firebase deploy --only hosting
+
+If login kekkudhu-na:
+firebase login
+
+
+Correct Firebase project select aagirukka-nu check panna:
+firebase use

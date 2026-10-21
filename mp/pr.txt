@@ -1,0 +1,73 @@
+Check:
+gcc --version
+mpicc --version
+mpirun --version
+
+If GCC install aagala na:
+sudo apt update
+sudo apt install build-essential
+
+MPI:
+
+pwd
+lsb_release -a
+sudo apt update
+sudo apt install build-essential openmpi-bin libopenmpi-dev
+gcc --version
+mpicc --version
+mpirun --version
+mkdir -p ~/parallel_lab
+cd ~/parallel_lab
+pwd
+ls
+nano mpi_hello.c
+then write program
+ctrl+o ->enter->ctrl+x
+
+--
+#include <stdio.h>
+#include <mpi.h>
+
+int main(int argc, char *argv[]) {
+    int rank, size;
+
+    MPI_Init(&argc, &argv);
+
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
+
+    printf("Hello from process %d of %d\n", rank, size);
+
+    MPI_Finalize();
+    return 0;
+}
+--
+mpicc mpi_hello.c -o mpi_hello
+mpirun -np 4 ./mpi_hello
+-------------------------------
+
+OPENMP:
+
+cd ~/parallel_lab
+nano omp_hello.c
+
+--
+#include <stdio.h>
+#include <omp.h>
+
+int main() {
+    int id, n;
+
+    #pragma omp parallel private(id)
+    {
+        id = omp_get_thread_num();
+        n = omp_get_num_threads();
+
+        printf("Hello from thread %d of %d\n", id, n);
+    }
+
+    return 0;
+}
+--
+gcc -fopenmp omp_hello.c -o omp_hello
+OMP_NUM_THREADS=4 ./omp_hello

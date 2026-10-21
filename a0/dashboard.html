@@ -1,93 +1,80 @@
+```html
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Student Dashboard</title>
 
     <link rel="stylesheet" href="style.css">
-
 </head>
 
 <body>
 
-<div class="container">
+    <div class="container">
 
-    <h1>Student Management System</h1>
+        <h1>Student Management System</h1>
 
-    <h2>Dashboard</h2>
+        <h2>Dashboard</h2>
 
-    <p id="user"></p>
+        <p id="user">Loading user details...</p>
 
-    <button onclick="logout()">
-        Logout
-    </button>
+        <button onclick="logout()">
+            Logout
+        </button>
 
-</div>
+    </div>
 
+    <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
 
-<script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
+    <script>
+        let auth0Client;
 
-<script>
+        async function start() {
+            try {
+                auth0Client = await auth0.createAuth0Client({
+                    domain: "dev-wesy33w1g8gd7cy6.us.auth0.com",
+                    clientId: "O7OHhgDMV8LyBvYSm1CYmItgSyQGrpMA",
+                    cacheLocation: "localstorage"
+                });
 
-let auth0Client;
+                const loggedIn = await auth0Client.isAuthenticated();
 
+                if (!loggedIn) {
+                    window.location.href = "index.html";
+                    return;
+                }
 
-async function start() {
+                const user = await auth0Client.getUser();
 
-    auth0Client = await auth0.createAuth0Client({
+                document.getElementById("user").innerText =
+                    "Welcome " + (user.name || user.email || "Student");
 
-        domain: "dev-wesy33w1g8gd7cy6.us.auth0.com",
+            } catch (error) {
+                console.error("Dashboard error:", error);
 
-        clientId: "O7OHhgDMV8LyBvYSm1CYmItgSyQGrpMA",
-
-        cacheLocation: "localstorage"
-
-    });
-
-
-    const loggedIn =
-        await auth0Client.isAuthenticated();
-
-
-    if (!loggedIn) {
-
-        window.location.href = "index.html";
-
-        return;
-
-    }
-
-
-    const user =
-        await auth0Client.getUser();
-
-
-    document.getElementById("user").innerText =
-        "Welcome " + user.name;
-
-}
-
-
-async function logout() {
-
-    await auth0Client.logout({
-
-        logoutParams: {
-
-            returnTo: window.location.origin + "/"
-
+                document.getElementById("user").innerText =
+                    "Unable to load user details. Please try logging in again.";
+            }
         }
 
-    });
+        async function logout() {
+            try {
+                await auth0Client.logout({
+                    logoutParams: {
+                        returnTo: window.location.origin + "/"
+                    }
+                });
+            } catch (error) {
+                console.error("Logout error:", error);
+            }
+        }
 
-}
-
-
-start();
-
-</script>
+        start();
+    </script>
 
 </body>
-
 </html>
+```
