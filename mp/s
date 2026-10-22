@@ -1,38 +1,175 @@
+Java check pannu
+Ubuntu-la Terminal open panni indha command type pannu:
+* java -version
 
-import org.apache.spark.SparkContext
-import org.apache.spark.SparkConf
 
-object SparkWordCount {
+Namma munnaadi use pannina Java 11 irundhaa, adhu output-la theriyum.
+Step 2 — Scala check pannu
+* scala -version
 
-  def main(args: Array[String]): Unit = {
 
-    // Create Spark Configuration
-    val conf = new SparkConf()
-      .setAppName("Word Count")
-      .setMaster("local[*]")
+- Version number vandhaa — Scala installed.
+- command not found vandhaa — Scala installed illa; next step-la adha handle pannalaam.
+Step 3 — Spark already installed-aa check pannu
+* spark-shell --version
 
-    // Create Spark Context
-    val sc = new SparkContext(conf)
 
-    // Read input file
-    val input = sc.textFile(args(0))
+- Version display aana — Spark already installed.
+- command not found vandhaa — Spark install pannalaam.
 
-    // Split lines into words
-    val words = input.flatMap(line => line.split("\\s+"))
+Install Scala
+Terminal-la indha command run pannu:
+* sudo apt update
 
-    // Assign count 1 to each word
-    val pairs = words.map(word => (word, 1))
 
-    // Count occurrences of each word
-    val counts = pairs.reduceByKey(_ + _)
+Idhu mudinjadhum:
+* sudo apt install scala
 
-    // Display the result
-    counts.collect().foreach(println)
 
-    // Save output to a file
-    counts.saveAsTextFile(args(1))
+Password kettaa Ubuntu password enter panni Y kettaa Y type panni Enter press pannu.
 
-    // Stop Spark Context
-    sc.stop()
-  }
-}
+Scala install mudinjadhum verify pannu:
+* scala -version
+
+* wget https://archive.apache.org/dist/spark/spark-3.5.7/spark-3.5.7-bin-hadoop3.tgz
+
+* cd ~/Downloads
+* ls -lh spark-3.5.7-bin-hadoop3.tgz
+* tar -xzf spark-3.5.7-bin-hadoop3.tgz
+* ls spark-3.5.7-bin-hadoop3
+* sudo mv ~/Downloads/spark-3.5.7-bin-hadoop3 /usr/local/spark
+* ls /usr/local/spark
+* nano ~/.bashrc
+
+File-oda last-ku po. Keyboard-la Alt + / press pannalaam; work aagala na Page Down use panni bottom-ku po.
+
+Last-la indha 2 lines add pannu:
+*
+
+export SPARK_HOME=/usr/local/spark
+export PATH=$PATH:$SPARK_HOME/bin
+
+
+Save panna:
+1. Ctrl + O
+2. Enter
+3. Ctrl + X
+
+* source ~/.bashrc
+* spark-shell --version -> it shows that SPARK symbol
+
+* mkdir -p ~/spark_lab
+* cd ~/spark_lab
+* nano input.txt
+
+hello hadoop
+hello world
+hadoop mapreduce
+hello hadoop
+
+* cat input.txt
+
+* spark-shell --master local[*]
+* scala> - ipdi varum
+
+* val inputfile = sc.textFile("file:///home/tce/spark_lab/input.txt")
+* inputfile.collect().foreach(println)
+
+output:
+hello hadoop
+hello world
+hadoop mapreduce
+hello hadoop
+
+* val counts = inputfile.flatMap(line => line.split("\\s+")).map(word => (word, 1)).reduceByKey(_ + _)
+* counts.collect().foreach(println)
+
+then output came.,......
+
+
+
+******************************************************************************************************************************
+
+* java -version
+* spark-shell --version
+* echo $SPARK_HOME
+* /usr/local/spark
+Expected output:
+/usr/local/spark
+
+
+Then check the Spark command path:
+* which spark-shell
+
+
+It should show a path under /usr/local/spark/bin/.
+
+If all three checks work, Spark is ready to use.
+
+Create the working folder
+
+* mkdir -p ~/spark_lab
+* cd ~/spark_lab
+
+
+Check the current location:
+* pwd
+
+
+Expected:
+/home/tce/spark_lab
+
+
+Step 5 — Create the input file
+
+* nano input.txt
+
+
+Type:
+hello hadoop
+hello world
+hadoop mapreduce
+hello hadoop
+
+
+Save using Ctrl + O → Enter → Ctrl + X.
+
+Verify:
+* cat input.txt
+
+
+The four lines should display.
+Step 6 — Start Spark
+* spark-shell --master local[*]
+
+
+Wait until you see:
+scala>
+
+
+local[*] means Spark runs locally using the available processor cores.
+Step 7 — Load the input file
+At the scala> prompt, enter:
+* val inputfile = sc.textFile("file:///home/tce/spark_lab/input.txt")
+
+
+Check the input:
+* inputfile.collect().foreach(println)
+
+
+Your four input lines should appear.
+Step 8 — Execute WordCount
+Enter this as one line:
+* val counts = inputfile.flatMap(line => line.split("\\s+")).map(word => (word, 1)).reduceByKey(_ + _)
+
+
+Display the counts:
+* counts.collect().foreach(println)
+
+
+Expected output (order may vary):
+(hadoop,3)
+(hello,3)
+(mapreduce,1)
+(world,1)
+

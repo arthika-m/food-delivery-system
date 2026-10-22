@@ -270,3 +270,228 @@ If it connects successfully, type:
 
 *******files codes replace pannumbothu no space at first
 
+* hdfs namenode -format
+* start-dfs.sh
+* start-yarn.sh
+* jps - idhula - 
+tce@tce-VirtualBox:~$ jps
+13136 NameNode
+13473 SecondaryNameNode
+13272 DataNode
+13803 Jps.....idhu vandhutu naa crt.....proceed pannalam...
+if not:
+* tail -n 40 $HADOOP_HOME/logs/*namenode*.log
+* start-dfs.sh
+* jps
+op should: 13136 NameNode
+13473 SecondaryNameNode
+13272 DataNode
+13803 Jps
+
+Create the HDFS input directory
+Terminal-la indha command run pannu:
+hdfs dfs -mkdir -p /user/$USER/input
+
+
+Idhu HDFS-kulla input directory create pannum.
+Step 2 — Verify the directory
+hdfs dfs -ls /user/$USER
+
+
+Expected output-la input directory varanum.
+Step 3 — Create a sample text file
+Ubuntu local filesystem-la file create pannuvom:
+* mkdir -p ~/parallel_lab
+* cd ~/parallel_lab
+* nano input.txt
+
+
+Nano editor open aagum. Indha text-a type pannu:
+* hello hadoop
+hello world
+hadoop mapreduce
+hello hadoop
+
+
+Save panna:
+1. Ctrl + O
+2. Enter
+3. Ctrl + X
+Step 4 — Upload the file to HDFS
+* hdfs dfs -put input.txt /user/$USER/input/
+
+
+Verify:
+* hdfs dfs -ls /user/$USER/input
+
+
+input.txt display aana upload successful.
+
+
+Start YARN
+Terminal-la indha command mattum run pannu:
+* start-yarn.sh
+
+
+Command complete aana, next indha command run pannu:
+* jps
+
+
+Expected output-la indha processes irukkanum:
+- NameNode
+- DataNode
+- SecondaryNameNode
+- ResourceManager
+- NodeManager
+Jps-um list-la irukkum; adhu normal.
+
+Run the WordCount program:
+* hadoop jar $HADOOP_HOME/share/hadoop/mapreduce/hadoop-mapreduce-examples-3.3.6.jar wordcount /user/$USER/input /user/$USER/output
+
+Fix mapred-site.xml:
+* nano $HADOOP_HOME/etc/hadoop/mapred-site.xml
+File-la already irukkura <configuration> ... </configuration> structure-kulla indha 3 properties irukkanum:
+
+<property>
+    <name>yarn.app.mapreduce.am.env</name>
+    <value>HADOOP_MAPRED_HOME=/home/tce/hadoop-3.3.6</value>
+</property>
+
+<property>
+    <name>mapreduce.map.env</name>
+    <value>HADOOP_MAPRED_HOME=/home/tce/hadoop-3.3.6</value>
+</property>
+
+<property>
+    <name>mapreduce.reduce.env</name>
+    <value>HADOOP_MAPRED_HOME=/home/tce/hadoop-3.3.6</value>
+</property>
+
+* cat $HADOOP_HOME/etc/hadoop/mapred-site.xml
+
+Restart YARN
+Indha commands-ai one by one run pannu:
+
+1. Stop YARN
+stop-yarn.sh
+
+
+2. Start YARN again
+start-yarn.sh
+
+
+3. Check the processes
+jps
+
+
+ResourceManager and NodeManager rendu perum output-la irukkanum.
+
+Check and rerun WordCount
+First, failed job create pannirukkakoodiya output directory irukka-nu check pannu:
+* hdfs dfs -ls /user/$USER/output
+
+
+Output path does not exist nu vandhaa, adhu okay. Appadi illama files irundhaa, output-ai paarkka munnaadi sollu.
+
+Output directory illai-na, indha command run pannu:
+
+* hadoop jar $HADOOP_HOME/share/hadoop/mapreduce/hadoop-mapreduce-examples-3.3.6.jar wordcount /user/$USER/input /user/$USER/output
+
+Indha time job successful-ah complete aagudha-nu paaru. Output-la map 100% reduce 100% and completed successfully nu vandhaa super!
+
+Display the result
+Indha command run pannu:
+* hdfs dfs -cat /user/$USER/output/part-r-00000
+
+
+Expected output:
+hadoop  3
+hello   3
+mapreduce  1
+world   1
+
+
+
+
+
+
+
+*************************************************************************************************************************
+Step 1 — Terminal open pannu
+* java -version
+
+
+* hadoop version
+
+
+* echo $HADOOP_HOME
+
+
+* jps
+
+Output check pannunga
+Command	Expected output
+java -version	Java version, e.g. 11.x
+hadoop version	Hadoop version, e.g. 3.3.6
+echo $HADOOP_HOME	Hadoop installation path
+jps	Hadoop Java processes, if daemons are running
+
+Important: jps-la Hadoop processes varala na, Hadoop install aagala nu artham illa. Daemons start pannama irukkalaam.
+Step 2 — HDFS and YARN start pannunga
+
+Hadoop daemons already running-aa irundhaa, indha step skip pannalaam. Illaina:
+* start-dfs.sh
+* start-yarn.sh
+
+
+Then verify:
+* jps
+
+
+NameNode, DataNode, SecondaryNameNode, ResourceManager, NodeManager madhiri processes varudha nu paarunga.
+Step 3 — Input file create pannunga
+* mkdir -p ~/parallel_lab
+* cd ~/parallel_lab
+* nano input.txt
+
+
+Indha content type pannunga:
+hello hadoop
+hello world
+hadoop mapreduce
+hello hadoop
+
+
+Save panna: Ctrl + O → Enter → Ctrl + X
+Step 4 — HDFS input folder create pannunga
+* hdfs dfs -mkdir -p /user/$USER/input
+
+
+File-a HDFS-ku upload pannunga:
+* hdfs dfs -put input.txt /user/$USER/input/
+
+
+Verify:
+* hdfs dfs -ls /user/$USER/input
+
+
+Step 5 — WordCount MapReduce program run pannunga
+First output folder already irukkaa nu check pannunga:
+* hdfs dfs -ls /user/$USER/output
+
+
+Folder already irundhaa, adhe output path use panna mudiyadhu. Ungaloda previous experiment output mattum dhaan delete panna allowed-na, adhai remove pannalaam; illaina output2 madhiri pudhu folder use pannunga.
+
+Output folder illaina run pannunga:
+* hadoop jar $HADOOP_HOME/share/hadoop/mapreduce/hadoop-mapreduce-examples-3.3.6.jar wordcount /user/$USER/input /user/$USER/output
+
+
+Step 6 — Final output display pannunga
+* hdfs dfs -cat /user/$USER/output/part-r-00000
+
+
+Expected output:
+hadoop 3
+hello 3
+mapreduce 1
+world 1
