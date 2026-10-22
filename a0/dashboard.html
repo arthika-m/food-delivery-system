@@ -1,30 +1,20 @@
-```html
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Student Dashboard</title>
-
+    <title>Student Management System - Dashboard</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-
     <div class="container">
-
         <h1>Student Management System</h1>
-
         <h2>Dashboard</h2>
 
         <p id="user">Loading user details...</p>
 
-        <button onclick="logout()">
-            Logout
-        </button>
-
+        <button onclick="logout()">Logout</button>
     </div>
 
     <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
@@ -43,20 +33,24 @@
                 const loggedIn = await auth0Client.isAuthenticated();
 
                 if (!loggedIn) {
-                    window.location.href = "index.html";
+                    window.location.replace(
+                        window.location.origin + "/"
+                    );
                     return;
                 }
 
                 const user = await auth0Client.getUser();
 
                 document.getElementById("user").innerText =
-                    "Welcome " + (user.name || user.email || "Student");
+                    "Welcome, " +
+                    (user.name || user.email || "Student") +
+                    "!";
 
             } catch (error) {
                 console.error("Dashboard error:", error);
 
                 document.getElementById("user").innerText =
-                    "Unable to load user details. Please try logging in again.";
+                    "Unable to load user details. Please log in again.";
             }
         }
 
@@ -74,7 +68,5 @@
 
         start();
     </script>
-
 </body>
 </html>
-```

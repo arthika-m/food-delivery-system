@@ -1,96 +1,75 @@
-const DROPBOX_ACCESS_TOKEN =
-    "sl.u.AGybGewfvaS2ZB6I3g1j6UKZgm4FUcYIeBSbdLba07YmOacslyKVGJ2taB8FSsqyywUlDL9TfrVr7wJ54Dnj5RV08D3lH_ENt2nKCF_1ia9h2K-9Cl2XgmWzEETjIf0Ta1xdwaI6vDio5zOOG7ZUfPl8PLp6PqVSm4MwpCRXULG4EEu__K3xrRBTIpDsXs-NSlRmCbsZWSXPnAWfV5Em3wieU6T0Qhew-38La6W-be1w6I9dSwTaTKmun7C1egfl7zM65JVg2kiLc9ehHqHAo5S4S1RLaLCD-6igLdY_lOz-eTlnL4YT9kH-koTLX7TZDn3KKrZyoD0Hjo-7TOfDFfbeeHwZv4A5Vycb1GrvOatjLItmthQnlbtHq2UaA3RfPB14H3IgZyoVd0WaQtBz2GCvGHnU6Oyx5ic9oljZk13l312-yzph19NW6SutJavYEjD3LFCxccOeFf7vxHsYpsL9rydTJteHl-x53R0lxu7ob90ZaVQxmiHwS5oOUC3LP-TUBjyDDHhO25qlWooNLQesDrUAX9qIdwBxzdYoXVq71sdhFVjStFfw00kS9dV8rIWP-nTiAFrH5RZ_WdsNVv3EZEhEryXNgKLdnZ5bA9cFb0ctVkL6hQfMQnxPa35eyglmKisgYVuw5fI5muvMZataL0xnZ8xTK0frjqcDIl3eYbIh7aWb-MzINQfR7obA0ejMpRyibiuEvN7K1G3BIkRPlUnDKOliYs0VGRProiyiKgE1GuUct0-0ILgfY2auCW3R0DI7lthYpO5SL1gcC8WODHxexPOzVHAgQEVehgAJHLEs3GJeLokb829wtyHHlAvcyh0IMEPZhM3LsGb8sPKTu9cAgsn0aU4A9p2DcNlhaicXSJ9li9CpRUSI848VJLywvmWs7M5ahK3BvIqvgP4m7aC8xgSVgKzpK8acnpLRrit0w48kMItVNMm0lqID-y6rfDlDXCYkJ7qaa9a9foGLbY0lNsOykNOUw9PGqx-igpcGvibFM6uzTtjSTBedvKZAO67koUbtVPy-0fwLQSYyx4nUbUwIBBY3jMnMzlIth4sEbyBGU55sknh-unJUlwYt1GD9IB5WLz35ERLEbiT5VL8LuZeS3WNHRvT7Xr_F5LshAbfgak90_UoephYeoSoP8LYR9A1ulx6rqitIY7jbV9KOC7UWsJzsdA5phFytT2Ie82xw4aXWEMqcIQPvKsnn97QE3IrP8dVFuYWJ0Po7zQQZmmG6U0YjOg1xioYOKVREmItTfcuY9jjhdj3L9drVB_qTPVytmqLbV0bpgeDj7GUfK3P1w8yIkNtOLLiu5_ukNyw2AUrscrniYlUNLGC2H5KhJ0ERoerS7AwyTxThjwPbl0V3FQC26ilQOCNNQP2MieKjS4inWbQ5SyXJ31WkB0smM7UksdNPYtilb586yDo9gleUiP__mus2AfOLwQ";
 
+const DROPBOX_ACCESS_TOKEN = "sl.u.AG1Z2Y-mrDqTroP4KO7Tn5nlFYtxd04G15FSt6Ho8ojz_wvN75S9G8UE2-TKdsOsHEnHlYGSEX2Dj1Gx2zbzRhBV1wcMuvFtKxzvE-j7h9-OpUuz933Agf1t8r1v1cuDvZs_48qdrpdK62f-JhhZEi5uc-AdsoxhQb_tH7oD52lJUfbR8Xtl2PLEf9hVcPJuMlocLIUKRJyThkRiS2S0B6GxrbwR2ra1opVOXxtOFq7drSxzM9pJMua-swiY2lWz7amWIqNYrHDj8ploOSARX5o1cTjRT0TSBvDGFH7M69dWZJg7XJVi-S6ewJAqE_4lPav_Z9Fv8zV8whJzfjvXxx1G0kVs04GswtH7-FxUtQT5Mi8Kf2sD806kla8wnqLzpD4bffMO3FETN4yqxKPqWC-jOh-Bq05hcM80GPFdQGWTj_9SbFta-twbo9JGNSNFYTdTf552hV4ea8u6Mrbdsp3qc-CBd_zpl-9I5UvYmK2ctdRoYu2A3iRYDNjdPrSwPgfMb9XG08URVosl7JbqFyNdSeD_k9GNTbyGLLzDuf1HYm_XTUBtx7z9IWs7H9jDExLuJKcAd2KF9S6B1tO-T413DwItoEgCvNvH2hD6hrgpwupMb46DE4ui97z_PXYV9QM9e2LQGsUzUTQagLj7LTQ2FO9aEl_bgfiu9eo-g1Yz4d7yrxd5A-Pu4G9XWBbmf140-gV4rc0umYu0amxYFJgd-qUgOoyqzcN2s_6JRTqkWwVe5NdF6-YPWRLQkCy9n1i8DjmywgEJAQn-TFgIBIo09GZPUwPSjDR2J_f0B9dfWRooLYVxMqXReJo1XK86aqggJrDhMd25kh9l0pU9j1a1YJpQbJ5n_qBFexq2Rwa_sikgFP-ieqd-NdmhJekNG4GUJxqiqrPGUZ8s14XYiK_y2QqSvtucaGAM5eF8F1RY1SQrwAKxDm3FhkuWpQygzNZBQgW7lEWJuNo3WKjtbHmUoEu865ZIS72RQs6p0mJXUMDUlUjDRK-QODZsyeIyyS3tWvfRL3N4vKbQRtKKzXHX-hEZQ2iM_QgnNjGL0zGOvEypi9jggnvr-40grAV81YeQeNkhgltLKoWVxL3e5vCzEuoezfyKfJalVwkyYBbBNyYJOb0ooCtGF7yX_bVbLkq7Fzjadh00teXQEn1_w8bqG_mnFxGC-gvLkcewvzCATX2goRkjOqKh52aptDrxYnjXHvE9ub37CugJI5TODNSMUMYkNaHaCAywemSBS79dWoSkeco13i5GtRyqKp8raz8rvwLozrftr9eKZtsoPbgS20C67MzNCkuSRMIKOlFhIoASnbjNwKv5Wx47tHmcKXWeSYB9JSZNwsMv6NZwLzVgTlk4E_UVVSGCtdFiC70B1h2eFd9cIIzPaZQpfsezO4z4QmSdlBN6OkhyluaoUQiDZm17GB945-hgHRkfEK4y7A";
 
 async function uploadFile() {
+    const fileInput = document.getElementById("file");
+    const message = document.getElementById("message");
 
-    const fileInput =
-        document.getElementById("file");
-
-    const message =
-        document.getElementById("message");
-
-
-    if (fileInput.files.length === 0) {
-
-        message.innerText =
-            "Please select a file";
-
+    if (!fileInput.files || fileInput.files.length === 0) {
+        message.innerText = "Please select a file.";
         return;
-
     }
 
+    if (
+        !DROPBOX_ACCESS_TOKEN ||
+        DROPBOX_ACCESS_TOKEN === "PASTE_YOUR_NEW_ACCESS_TOKEN_HERE"
+    ) {
+        message.innerText = "Please configure your Dropbox access token.";
+        return;
+    }
 
-    const file =
-        fileInput.files[0];
-
-
-    message.innerText =
-        "Uploading...";
-
+    const file = fileInput.files[0];
+    message.innerText = "Uploading...";
 
     try {
-
         const response = await fetch(
             "https://content.dropboxapi.com/2/files/upload",
             {
-
                 method: "POST",
-
                 headers: {
-
-                    "Authorization":
-                        "Bearer " + DROPBOX_ACCESS_TOKEN,
-
-                    "Dropbox-API-Arg":
-                        JSON.stringify({
-
-                            path: "/" + file.name,
-
-                            mode: "add",
-
-                            autorename: true
-
-                        }),
-
-                    "Content-Type":
-                        "application/octet-stream"
-
+                    "Authorization": "Bearer " + DROPBOX_ACCESS_TOKEN,
+                    "Dropbox-API-Arg": JSON.stringify({
+                        path: "/" + file.name,
+                        mode: "add",
+                        autorename: true,
+                        mute: false
+                    }),
+                    "Content-Type": "application/octet-stream"
                 },
-
                 body: file
-
             }
         );
 
-
         if (response.ok) {
-
+            const result = await response.json();
             message.innerText =
                 "File uploaded successfully to Dropbox!";
+            console.log("Upload result:", result);
+        } else {
+            const errorText = await response.text();
+            console.error("Dropbox error:", response.status, errorText);
 
+            if (response.status === 401) {
+                message.innerText =
+                    "Authentication failed. Generate a valid Dropbox access token.";
+            } else if (response.status === 403) {
+                message.innerText =
+                    "Permission denied. Check your Dropbox app permissions.";
+            } else if (response.status === 409) {
+                message.innerText =
+                    "Dropbox path or file conflict. Check the selected file.";
+            } else {
+                message.innerText =
+                    "Upload failed. Check the browser console.";
+            }
         }
-
-        else {
-
-            const error =
-                await response.text();
-
-            console.log(error);
-
-            message.innerText =
-                "Upload failed";
-        }
-    }
-    catch (error) {
-        console.log(error);
+    } catch (error) {
+        console.error("Upload error:", error);
         message.innerText =
-            "Error connecting to Dropbox";
+            "Unable to connect to Dropbox. Check your internet connection.";
     }
 }
+
 function logout() {
-
-    window.location.href =
-        "index.html";
-
+    window.location.href = "index.html";
 }
